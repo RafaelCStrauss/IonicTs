@@ -1,81 +1,134 @@
 <template>
   <ion-page>
     <ion-content class="ion-padding welcome-content">
-      <div class="welcome-container">
+      <ion-grid class="welcome-container">
+        
         <!-- Topo com Perfil e Saudação -->
-        <div class="user-header">
-          <div class="user-info">
-            <ion-icon :icon="personCircleOutline" class="user-icon"></ion-icon>
-            <div class="user-text-container">
-              <ion-text class="greeting">Olá,</ion-text>
-              <ion-text class="username"
-                ><h2>{{ nomeUsuario }}</h2></ion-text
-              >
+        <ion-row class="user-header ion-align-items-center ion-justify-content-between">
+          <ion-col size="auto" class="ion-no-padding">
+            <div class="user-info-wrapper">
+              <ion-icon :icon="personCircleOutline" class="user-icon"></ion-icon>
+              <ion-text class="user-text-container">
+                <p class="greeting">Olá,</p>
+                <h2 class="username">{{ nomeUsuario }}</h2>
+              </ion-text>
             </div>
-          </div>
-        </div>
+          </ion-col>
+        </ion-row>
 
         <!-- Hero Card de Bem-vindo -->
-        <ion-card class="hero-card">
-          <ion-card-content class="hero-card-content">
-            <div class="hero-text">
-              <ion-text><h1>Bem-vindo de volta! 👋</h1></ion-text>
-              <ion-text><p>Seu painel está pronto. Confira o resumo das suas atividades de hoje.</p></ion-text>
-            </div>
-            <ion-button shape="round" class="action-btn">
-              Explorar
-              <ion-icon :icon="arrowForwardOutline" slot="end"></ion-icon>
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
+        <ion-row>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-card class="hero-card">
+              <ion-card-content class="hero-card-content">
+                <ion-text class="hero-text">
+                  <h1>Bem-vindo de volta! 👋</h1>
+                  <p>Seu painel está pronto. Confira o resumo das suas atividades de hoje.</p>
+                </ion-text>
+                <ion-button shape="round" class="action-btn">
+                  Explorar
+                  <ion-icon :icon="arrowForwardOutline" slot="end"></ion-icon>
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
 
         <!-- Grid de Ações Rápidas -->
-        <div class="quick-actions">
-          <ion-text><h3>Acesso Rápido</h3></ion-text>
-          <div class="cards-grid">
-            <div class="action-card">
-              <div class="card-icon blue">
-                <ion-icon :icon="sparklesOutline"></ion-icon>
-              </div>
-              <ion-text><span>Tarefas</span></ion-text>
-            </div>
+        <ion-row class="quick-actions-section">
+          <ion-col size="12" class="ion-no-padding">
+            <ion-text class="section-title"><h3>Acesso Rápido</h3></ion-text>
+            <ion-grid class="cards-grid ion-no-padding">
+              <ion-row>
+                
+                <!-- Card Tarefas -->
+                <ion-col size="4">
+                  <ion-card class="action-card" router-link="/tarefas">
+                    <ion-card-content class="action-card-content">
+                      <div class="card-icon blue">
+                        <ion-icon :icon="sparklesOutline"></ion-icon>
+                      </div>
+                      <ion-text><span>Tarefas</span></ion-text>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
 
-            <div class="action-card">
-              <div class="card-icon purple">
-                <ion-icon :icon="gridOutline"></ion-icon>
-              </div>
-              <ion-text><span>Projetos</span></ion-text>
-            </div>
+                <!-- Card Projetos -->
+                <ion-col size="4">
+                  <ion-card class="action-card">
+                    <ion-card-content class="action-card-content">
+                      <div class="card-icon purple">
+                        <ion-icon :icon="gridOutline"></ion-icon>
+                      </div>
+                      <ion-text><span>Projetos</span></ion-text>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
 
-            <div class="action-card">
-              <div class="card-icon green">
-                <ion-icon :icon="settingsOutline"></ion-icon>
-              </div>
-              <ion-text><span>Ajustes</span></ion-text>
-            </div>
-          </div>
-        </div>
+                <!-- Card Ajustes -->
+                <ion-col size="4">
+                  <ion-card class="action-card">
+                    <ion-card-content class="action-card-content">
+                      <div class="card-icon green">
+                        <ion-icon :icon="settingsOutline"></ion-icon>
+                      </div>
+                      <ion-text><span>Ajustes</span></ion-text>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
 
         <!-- Botão de Logout Centralizado -->
-        <ion-button shape="round" color="danger" class="logout-btn" @click="Sair()"> Sair </ion-button>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="auto" class="ion-no-padding">
+            <ion-button shape="round" color="danger" class="logout-btn" @click="Sair()">
+              Sair
+            </ion-button>
+          </ion-col>
+        </ion-row>
 
-        <ion-list class="minha-lista-tarefas">
-          <ion-item v-for="tarefa in listaTarefas" :key="tarefa.id" class="tarefa-item">
-            <ion-label>
-              <h2>{{ tarefa.Nome }}</h2>
-              <p>{{ tarefa.Descricao }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
+        <!-- Lista de Tarefas -->
+        <ion-row>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-list class="minha-lista-tarefas">
+              <ion-item v-for="tarefa in listaTarefas" :key="tarefa.id" class="tarefa-item" lines="none">
+                <ion-label>
+                  <h2>{{ tarefa.Nome }}</h2>
+                  <p>{{ tarefa.Descricao }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import router from '@/router';
-import { supabase } from '@/services/supabase';
-import { IonContent, IonPage, IonButton, IonIcon, IonText, IonCard, IonCardContent } from '@ionic/vue';
+import { supabase, PegarTarefas } from '@/services/supabase';
+import {
+  IonContent,
+  IonPage,
+  IonButton,
+  IonIcon,
+  IonText,
+  IonCard,
+  IonCardContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonList,
+  IonItem,
+  IonLabel,
+  onIonViewWillEnter,
+} from '@ionic/vue';
 import {
   personCircleOutline,
   arrowForwardOutline,
@@ -84,20 +137,23 @@ import {
   settingsOutline,
 } from 'ionicons/icons';
 
-import { onMounted, ref } from 'vue';
-
-import { PegarTarefas } from '@/services/supabase';
+import { ref } from 'vue';
 
 const nomeUsuario = ref('');
 const listaTarefas = ref<any[]>([]);
 
-onMounted(async () => {
+onIonViewWillEnter(async () => {
+  // Busca o usuário logado
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (user) {
     nomeUsuario.value = user.user_metadata?.nome || 'Usuário';
   }
+
+  // Busca as tarefas
+  const tarefas = await PegarTarefas();
+  listaTarefas.value = tarefas ?? [];
 });
 
 async function Sair() {
@@ -108,11 +164,6 @@ async function Sair() {
     router.push('/login');
   }
 }
-
-onMounted(async () => {
-  const tarefas = await PegarTarefas();
-  listaTarefas.value = tarefas ?? [];
-});
 </script>
 
 <style scoped>
@@ -131,13 +182,10 @@ onMounted(async () => {
 
 /* Cabeçalho do Usuário */
 .user-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 8px 0;
 }
 
-.user-info {
+.user-info-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -152,9 +200,10 @@ onMounted(async () => {
   display: block;
   font-size: 0.85rem;
   color: #94a3b8;
+  margin: 0;
 }
 
-.username h2 {
+.username {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
@@ -202,36 +251,44 @@ onMounted(async () => {
 }
 
 /* Ações Rápidas */
-.quick-actions h3 {
+.section-title h3 {
   color: #f8fafc;
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 16px 0;
 }
 
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+.cards-grid ion-col {
+  padding: 0 6px;
+}
+
+.cards-grid ion-col:first-child {
+  padding-left: 0;
+}
+
+.cards-grid ion-col:last-child {
+  padding-right: 0;
 }
 
 .action-card {
   background: #1e293b;
   border: 1.5px solid #334155;
   border-radius: 16px;
-  padding: 16px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  margin: 0;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .action-card:active {
   transform: scale(0.96);
+}
+
+.action-card-content {
+  padding: 16px 8px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .action-card span {
@@ -267,7 +324,6 @@ onMounted(async () => {
 
 /* Botão de Logout Centralizado */
 .logout-btn {
-  align-self: center;
   width: 220px;
   height: 45px;
   font-weight: 600;
@@ -278,7 +334,7 @@ onMounted(async () => {
 .minha-lista-tarefas {
   background: transparent !important;
   margin-top: 16px;
-  padding: 0 8px;
+  padding: 0;
 }
 
 /* Estiliza apenas os itens dentro da nossa lista de tarefas */

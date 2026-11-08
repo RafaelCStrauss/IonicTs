@@ -20,3 +20,27 @@ export async function PegarTarefas() {
     return tarefas
 }
 
+
+export async function CriarTarefas(nome: string, desc: string, date: Date) {
+
+    const {data: {user}, error: userError} = await supabase.auth.getUser();
+    
+    if( userError || !user ){
+        return;
+    }
+
+    const {data, error,} = await supabase.from('Tarefas').insert({
+        Nome: nome,
+        Descricao: desc,
+        Data: date,
+        user_id: user.id,
+    })
+    if(error){
+        alert(error.message);
+        return null
+    }
+
+    console.log('Tarefa criada com sucesso');
+    return data
+}
+

@@ -24,6 +24,11 @@ const routes: RouteRecordRaw[] = [
     name: 'cadastro',
     component: () => import('../views/CadastroPage.vue'),
   },
+  {
+    path: '/tarefas',
+    name: 'tarefas',
+    component: () => import('../views/TarefasPage.vue'),
+  },
 ];
 
 const router = createRouter({
