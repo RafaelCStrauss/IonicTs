@@ -2,14 +2,15 @@
   <ion-page>
     <ion-content class="ion-padding welcome-content">
       <div class="welcome-container">
-        
         <!-- Topo com Perfil e Saudação -->
         <div class="user-header">
           <div class="user-info">
             <ion-icon :icon="personCircleOutline" class="user-icon"></ion-icon>
             <div class="user-text-container">
               <ion-text class="greeting">Olá,</ion-text>
-              <ion-text class="username"><h2>{{ nomeUsuario }}</h2></ion-text>
+              <ion-text class="username"
+                ><h2>{{ nomeUsuario }}</h2></ion-text
+              >
             </div>
           </div>
         </div>
@@ -32,12 +33,11 @@
         <div class="quick-actions">
           <ion-text><h3>Acesso Rápido</h3></ion-text>
           <div class="cards-grid">
-            
             <div class="action-card">
               <div class="card-icon blue">
                 <ion-icon :icon="sparklesOutline"></ion-icon>
               </div>
-              <ion-text><span>Recentes</span></ion-text>
+              <ion-text><span>Tarefas</span></ion-text>
             </div>
 
             <div class="action-card">
@@ -53,15 +53,20 @@
               </div>
               <ion-text><span>Ajustes</span></ion-text>
             </div>
-
           </div>
         </div>
 
         <!-- Botão de Logout Centralizado -->
-        <ion-button shape="round" color="danger" class="logout-btn" @click="Sair()">
-          Sair
-        </ion-button>
+        <ion-button shape="round" color="danger" class="logout-btn" @click="Sair()"> Sair </ion-button>
 
+        <ion-list class="minha-lista-tarefas">
+          <ion-item v-for="tarefa in listaTarefas" :key="tarefa.id" class="tarefa-item">
+            <ion-label>
+              <h2>{{ tarefa.Nome }}</h2>
+              <p>{{ tarefa.Descricao }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
       </div>
     </ion-content>
   </ion-page>
@@ -70,29 +75,26 @@
 <script setup lang="ts">
 import router from '@/router';
 import { supabase } from '@/services/supabase';
-import { 
-  IonContent, 
-  IonPage, 
-  IonButton,
-  IonIcon,
-  IonText,
-  IonCard,
-  IonCardContent
-} from '@ionic/vue';
-import { 
-  personCircleOutline, 
-  arrowForwardOutline, 
-  sparklesOutline, 
-  gridOutline, 
-  settingsOutline 
+import { IonContent, IonPage, IonButton, IonIcon, IonText, IonCard, IonCardContent } from '@ionic/vue';
+import {
+  personCircleOutline,
+  arrowForwardOutline,
+  sparklesOutline,
+  gridOutline,
+  settingsOutline,
 } from 'ionicons/icons';
 
 import { onMounted, ref } from 'vue';
 
+import { PegarTarefas } from '@/services/supabase';
+
 const nomeUsuario = ref('');
+const listaTarefas = ref<any[]>([]);
 
 onMounted(async () => {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (user) {
     nomeUsuario.value = user.user_metadata?.nome || 'Usuário';
   }
@@ -100,13 +102,17 @@ onMounted(async () => {
 
 async function Sair() {
   const { error } = await supabase.auth.signOut();
-  if(error){
+  if (error) {
     alert(error.message);
-  }
-  else{
+  } else {
     router.push('/login');
   }
 }
+
+onMounted(async () => {
+  const tarefas = await PegarTarefas();
+  listaTarefas.value = tarefas ?? [];
+});
 </script>
 
 <style scoped>
@@ -219,7 +225,9 @@ async function Sair() {
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .action-card:active {
@@ -265,5 +273,39 @@ async function Sair() {
   font-weight: 600;
   margin-top: 10px;
   --box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.minha-lista-tarefas {
+  background: transparent !important;
+  margin-top: 16px;
+  padding: 0 8px;
+}
+
+/* Estiliza apenas os itens dentro da nossa lista de tarefas */
+.minha-lista-tarefas .tarefa-item {
+  --background: #1e1e24;
+  --color: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.minha-lista-tarefas .tarefa-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Tipografia restrita apenas a este bloco */
+.minha-lista-tarefas ion-label h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin-bottom: 4px;
+}
+
+.minha-lista-tarefas ion-label p {
+  font-size: 14px;
+  color: #9ca3af;
+  line-height: 1.4;
 }
 </style>
